@@ -20,25 +20,34 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id'
       })
     }
-    can(action){
+
+    can(action) {
       let allowedActions = [];
-      if (this.role === 'staff'){
+      if (this.role === 'staff') {
         allowedActions = [
-            'add course',
-            'edit course',
-            'delete course',
-            'view students',
-            'view student profiles',
-            'enroll student',
-            'drop student',
-            'delete student'
+          'add course',
+          'edit course',
+          'delete course',
+          'view students',
+          'view student profiles',
+          'enroll student',
+          'drop student',
+          'delete student'
         ]
       } else {
         allowedActions = ['view self', 'enroll self', 'drop self', 'edit self']
       }
-      return allowedActions.indexOf(action)!== -1
+      return allowedActions.indexOf(action) !== -1
     }
+
+    matchesStudentId(id){
+      if (!this.student){
+        return false;
+      }
+      return this.student.id === id;
+    };
   };
+
   User.init({
     email: DataTypes.STRING,
     password: DataTypes.STRING,
